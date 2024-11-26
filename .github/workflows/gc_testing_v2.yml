@@ -64,6 +64,9 @@ jobs:
         run: |
           docker compose up -d gc-testing-app-zgc
 
+      - name: Wait for application start
+        run: sleep 10
+
       # Run Postman tests for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
