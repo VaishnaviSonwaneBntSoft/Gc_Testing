@@ -7,11 +7,11 @@
 	},
 	"item": [
 		{
-			"name": "helloworld with G1GC",
+			"name": "helloworld with ZGC",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "gc-testing-app-g1gc:8089/gc/hello-world"
+				"url": "gc-testing-app-zgc:8089/gc/hello-world"
 			},
 			"response": []
 		}
