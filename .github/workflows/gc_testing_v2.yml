@@ -12,7 +12,7 @@ jobs:
 
     env:
       IMAGE_NAME: "gc-testing-image"
-      APP_PORT: 8080
+      APP_PORT: 8089
       G1GC_PARAMS: "-XX:+UseG1GC"
       ZGC_PARAMS: "-XX:+UseZGC"
 
