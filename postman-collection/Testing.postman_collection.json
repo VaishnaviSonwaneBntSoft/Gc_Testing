@@ -11,7 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "gc-testing-app-g1gc:8080/gc/hello-world"
+				"url": "gc-testing-app-g1gc:8081/gc/hello-world"
 			},
 			"response": []
 		},
@@ -20,7 +20,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "gc-testing-app-zgc:8080/gc/hello-world"
+				"url": "gc-testing-app-zgc:8082/gc/hello-world"
 			},
 			"response": []
 		}
