@@ -66,7 +66,7 @@ jobs:
       # Run Postman tests for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
-          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -v $(pwd)/results:/etc/newman/results -t postman/newman run /etc/newman/TestingZgc.postman_collection.json --reporter-json-export /etc/newman/results/zgc_results.json
+          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -v $(pwd)/results:/etc/newman/results -t postman/newman run /etc/newman/TestingZgc.postman_collection.json --reporter-json-export /etc/newman/results/zgc_results.json --host gc-testing-app-zgc:8082
 
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
