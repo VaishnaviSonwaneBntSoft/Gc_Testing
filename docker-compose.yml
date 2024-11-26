@@ -25,6 +25,7 @@ services:
 
   newman:
     image: postman/newman
+    container_name: newman
     depends_on:
       - gc-testing-app-g1gc
       - gc-testing-app-zgc
