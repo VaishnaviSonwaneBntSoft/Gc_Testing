@@ -1,0 +1,97 @@
+name: comparison of garbage collectors
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: "gcTesting-image"
+      APP_PORT: 8080
+      G1GC_PARAMS: "-XX:+UseG1GC"
+      ZGC_PARAMS: "-XX:+UseZGC"
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Java 21
+      - name: Set up Java 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      # Set up Gradle
+      - name: Set up Gradle
+        uses: gradle/wrapper-validation-action@v1
+
+      # Make Gradlew executable
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # Build the JAR file
+      - name: Build the JAR file
+        run: ./gradlew build
+
+      # Build Docker image
+      - name: Build Docker Image
+        run: docker build -t $IMAGE_NAME .
+
+      #Create custom network
+      - name: Create Docker Network
+        run: docker network create test-network
+
+      # Run application with G1GC
+      - name: Run Application with G1GC
+        run: |
+          docker run -d --name gc-testing-app --network test-network -p 8080:8080 $IMAGE_NAME java $G1GC_PARAMS -jar build/libs/GCTesting-0.0.1-SNAPSHOT.jar
+        id: g1gc-app
+
+      # Pull Newman Docker Image
+      - name: Pull Newman Docker Image
+        run: docker pull postman/newman
+
+      # Run Postman tests using Newman Docker image (G1GC)
+      - name: Run Postman Tests (G1GC)
+        run: |
+          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
+        id: g1gc-test
+
+      # Stop G1GC container
+      - name: Stop G1GC Container
+        run: docker stop g1gc-app && docker rm g1gc-app
+
+      # Run application with ZGC
+      - name: Run Application with ZGC
+        run: |
+          docker run -d --name gc-testing-app --network test-network -p 8081:8080 $IMAGE_NAME java $ZGC_PARAMS -jar build/libs/GCTesting-0.0.1-SNAPSHOT.jar
+        id: zgc-app
+
+      # Run Postman tests using Newman Docker image (ZGC)
+      - name: Run Postman Tests (ZGC)
+        run: |
+          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/zgc_results.json
+        id: zgc-test
+
+      # Stop ZGC container
+      - name: Stop ZGC Container
+        run: docker stop zgc-app && docker rm zgc-app
+
+      #Remove custom network
+      - name: Remove Docker Network
+        run: docker network rm test-network
+
+      # Publish Test Results
+      - name: Publish Test Results to GitHub Packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: gc-comparison-results
+          path: results/

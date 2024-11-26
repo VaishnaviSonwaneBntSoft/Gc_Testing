@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "50e68400-58e3-4a66-9710-342ce09dad62",
+		"name": "Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36218102"
+	},
+	"item": [
+		{
+			"name": "helloworld",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8089/gc/hello-world"
+			},
+			"response": []
+		}
+	]
+}
