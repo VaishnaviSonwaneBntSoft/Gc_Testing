@@ -7,11 +7,20 @@
 	},
 	"item": [
 		{
-			"name": "helloworld",
+			"name": "helloworld with G1GC",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "gc-testing-app:8080/gc/hello-world"
+				"url": "gc-testing-app-g1gc:8080/gc/hello-world"
+			},
+			"response": []
+		},
+		{
+			"name": "helloworld with ZGC",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "gc-testing-app-zgc:8080/gc/hello-world"
 			},
 			"response": []
 		}
