@@ -11,16 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "gc-testing-app-g1gc:8081/gc/hello-world"
-			},
-			"response": []
-		},
-		{
-			"name": "helloworld with ZGC",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "gc-testing-app-zgc:8082/gc/hello-world"
+				"url": "gc-testing-app-g1gc:8089/gc/hello-world"
 			},
 			"response": []
 		}
