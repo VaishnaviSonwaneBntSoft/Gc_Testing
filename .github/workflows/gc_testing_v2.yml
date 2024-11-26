@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: "gcTesting-image"
+      IMAGE_NAME: "gc-testing-image"
       APP_PORT: 8080
       G1GC_PARAMS: "-XX:+UseG1GC"
       ZGC_PARAMS: "-XX:+UseZGC"
