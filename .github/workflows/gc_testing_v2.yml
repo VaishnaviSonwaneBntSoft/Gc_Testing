@@ -47,20 +47,16 @@ jobs:
       - name: Run Docker Compose
         run: docker compose up -d
 
-      # Pull Newman Docker Image
-      - name: Pull Newman Docker Image
-        run: docker pull postman/newman
-
-      # Run Postman tests using Newman Docker image (G1GC)
+      # Run Postman tests with Newman for G1GC
       - name: Run Postman Tests (G1GC)
         run: |
-          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
+          docker exec -t newman newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
         id: g1gc-test
 
-      # Run Postman tests using Newman Docker image (ZGC)
+      # Run Postman tests with Newman for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
-          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/zgc_results.json
+          docker exec -t newman newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/zgc_results.json
         id: zgc-test
 
       # Stop and remove containers using Docker Compose
