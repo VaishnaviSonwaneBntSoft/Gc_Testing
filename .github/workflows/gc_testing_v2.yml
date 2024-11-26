@@ -64,13 +64,13 @@ jobs:
       # Run Postman tests with Newman for G1GC
       - name: Run Postman Tests (G1GC)
         run: |
-          docker exec -t newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
+          docker exec -t newman newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
         id: g1gc-test
 
       # Run Postman tests with Newman for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
-          docker exec -t newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/zgc_results.json
+          docker exec -t newman newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/zgc_results.json
         id: zgc-test
 
       # Stop and remove containers using Docker Compose
