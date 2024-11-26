@@ -10,6 +10,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     env:
       IMAGE_NAME: "gc-testing-image"
       APP_PORT: 8089
