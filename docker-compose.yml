@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  gc-testing-app-g1gc:
+    image: gc-testing-image
+    build:
+      context: .
+    container_name: gc-testing-app-g1gc
+    ports:
+      - "8080:8080"
+    networks:
+      - test-network
+    environment:
+      - G1GC_PARAMS=-XX:+UseG1GC
+    command: ["java", "-jar", "/app/Gctesting.jar"]
+
+  gc-testing-app-zgc:
+    image: gc-testing-image
+    build:
+      context: .
+    container_name: gc-testing-app-zgc
+    ports:
+      - "8081:8080"
+    networks:
+      - test-network
+    environment:
+      - ZGC_PARAMS=-XX:+UseZGC
+    command: ["java", "-jar", "/app/Gctesting.jar"]
+
+  newman:
+    image: postman/newman
+    container_name: newman
+    depends_on:
+      - gc-testing-app-g1gc
+      - gc-testing-app-zgc
+    networks:
+      - test-network
+    volumes:
+      - ./postman-collection:/etc/newman
+    command: run /etc/newman/Testing.json --delay-request 1000 --timeout-request 5000 --reporter-json-export /etc/newman/results.json
+
+networks:
+  test-network:
+    driver: bridge
