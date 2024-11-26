@@ -24,9 +24,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Create results directory dynamically
-      - name: Create Results Directory
-        run: mkdir -p results
+      - name: Create directory dynamically
+        run: |
+          mkdir -p $(pwd)/results
+          echo "Directory created"
 
       # Set up Java 21
       - name: Set up Java 21
@@ -47,8 +48,7 @@ jobs:
       - name: Build the JAR file
         run: ./gradlew build
 
-      # Create Docker network
-      - name: Create Network
+      - name: Create network
         run: docker network create test-network
 
       # Build and start the G1GC container
@@ -66,6 +66,16 @@ jobs:
           run /etc/newman/Testing.postman_collection.json \
           --reporter-json-export /etc/newman/results/g1gc_results.json
 
+      # Check contents of results folder inside container (G1GC)
+      - name: Check G1GC Results Inside Container
+        run: |
+          docker exec -it $(docker ps -q --filter name=gc-testing-app-g1gc) ls -la /etc/newman/results
+
+      # Copy results from container to repository (G1GC)
+      - name: Copy G1GC Results to Repository
+        run: |
+          docker cp $(docker ps -q --filter name=gc-testing-app-g1gc):/etc/newman/results ./results_from_g1gc
+
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
         run: |
@@ -77,10 +87,6 @@ jobs:
         run: |
           docker compose up -d gc-testing-app-zgc
 
-      # Wait for the application to start
-      - name: Wait for Application Start
-        run: sleep 10
-
       # Run Postman tests for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
@@ -91,24 +97,30 @@ jobs:
           run /etc/newman/TestingZgc.postman_collection.json \
           --reporter-json-export /etc/newman/results/zgc_results.json
 
+      # Check contents of results folder inside container (ZGC)
+      - name: Check ZGC Results Inside Container
+        run: |
+          docker exec -it $(docker ps -q --filter name=gc-testing-app-zgc) ls -la /etc/newman/results
+
+      # Copy results from container to repository (ZGC)
+      - name: Copy ZGC Results to Repository
+        run: |
+          docker cp $(docker ps -q --filter name=gc-testing-app-zgc):/etc/newman/results ./results_from_zgc
+
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
-        run: docker compose down --remove-orphans
+        run: |
+          docker compose down --remove-orphans
 
-      # Debug: List Results Directory
-      - name: List Results Directory
-        run: ls -la results
-
-      # Publish Test Results for G1GC
-      - name: Publish G1GC Test Results
+      # Publish Test Results
+      - name: Publish G1GC Test Results to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
           name: g1gc_results
-          path: results/g1gc_results.json
+          path: results_from_g1gc/g1gc_results.json
 
-      # Publish Test Results for ZGC
-      - name: Publish ZGC Test Results
+      - name: Publish ZGC Test Results to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
           name: zgc_results
-          path: results/zgc_results.json
+          path: results_from_zgc/zgc_results.json
