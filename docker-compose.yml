@@ -23,18 +23,6 @@ services:
     environment:
       - ZGC_PARAMS=-XX:+UseZGC
 
-  newman:
-    image: postman/newman
-    container_name: newman
-    depends_on:
-      - gc-testing-app-g1gc
-      - gc-testing-app-zgc
-    networks:
-      - test-network
-    volumes:
-      - ./postman-collection:/etc/newman
-    command: run /etc/newman/Testing.json --delay-request 1000 --reporter-json-export /etc/newman/results.json
-
 networks:
   test-network:
     driver: bridge
