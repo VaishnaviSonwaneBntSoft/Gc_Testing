@@ -43,20 +43,35 @@ jobs:
       - name: Create network
         run: docker network create test-network
 
-      # Run Docker Compose
-      - name: Run Docker Compose
-        run: docker compose up -d
+      # Build and start the G1GC container
+      - name: Run G1GC Container
+        run: |
+          docker compose up -d gc-testing-app-g1gc
 
-      # Run Postman tests with Newman for G1GC
+      # Run Postman tests for G1GC
       - name: Run Postman Tests (G1GC)
         run: |
-          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/g1gc_results.json
-        id: g1gc-test
-        
-      # Stop and remove containers using Docker Compose
-      - name: Stop and Remove Containers
+          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -v $(pwd)/results:/etc/newman/results -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/results/g1gc_results.json
+
+      # Stop and remove the G1GC container
+      - name: Stop and Remove G1GC Container
         run: |
-          docker compose down
+          docker compose down --remove-orphans
+
+      # Build and start the ZGC container
+      - name: Run ZGC Container
+        run: |
+          docker compose up -d gc-testing-app-zgc
+
+      # Run Postman tests for ZGC
+      - name: Run Postman Tests (ZGC)
+        run: |
+          docker run --network test-network -v $(pwd)/postman-collection:/etc/newman -v $(pwd)/results:/etc/newman/results -t postman/newman run /etc/newman/Testing.postman_collection.json --reporter-json-export /etc/newman/results/zgc_results.json
+
+      # Stop and remove the ZGC container
+      - name: Stop and Remove ZGC Container
+        run: |
+          docker compose down --remove-orphans
 
       # Publish Test Results
       - name: Publish Test Results to GitHub Packages
