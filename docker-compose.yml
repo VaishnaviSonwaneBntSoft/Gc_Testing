@@ -24,6 +24,7 @@ services:
       - ZGC_PARAMS=-XX:+UseZGC
 
   newman:
+    image: postman/newman
     depends_on:
       - gc-testing-app-g1gc
       - gc-testing-app-zgc
