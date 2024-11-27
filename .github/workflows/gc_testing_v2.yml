@@ -56,7 +56,7 @@ jobs:
       # Build and start the G1GC container
       - name: Run G1GC Container
         run: |
-          docker compose up -d gc-testing-app-g1g
+          docker compose up -d gc-testing-app-g1
 
       # Run Postman tests for G1GC
       - name: Run Postman Tests (G1GC)
