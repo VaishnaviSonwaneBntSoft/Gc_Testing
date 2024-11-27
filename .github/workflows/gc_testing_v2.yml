@@ -82,7 +82,7 @@ jobs:
         run: |
           docker cp gc_testing-gc-testing-app-g1gc-1:/etc/newman/results ./results_from_g1gc
           ls -la ./results_from_g1gc/results
-          cat ./results_from_g1gc/results/*
+          cat ./results_from_g1gc/results/g1gc_results.json
 
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
@@ -123,7 +123,7 @@ jobs:
         run: |
           docker cp gc_testing-gc-testing-app-zgc-1:/etc/newman/results ./results_from_zgc
           ls -la ./results_from_zgc/results
-          cat ./results_from_zgc/results/*
+          cat ./results_from_zgc/results/zgc_results.json
 
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
