@@ -70,7 +70,7 @@ jobs:
       # Check contents of results folder inside container (G1GC)
       - name: Check G1GC Results Inside Container
         run: |
-          docker exec $(docker ps -q --filter name=gc-testing-app-g1gc) ls -la /etc/newman/results
+          docker exec gc-testing-app-g1gc ls -la /
 
       # Copy results from container to repository (G1GC)
       - name: Copy G1GC Results to Repository
