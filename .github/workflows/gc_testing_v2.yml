@@ -57,6 +57,7 @@ jobs:
       - name: Run G1GC Container
         run: |
           docker compose up -d gc-testing-app-g1gc
+          docker exec gc_testing-gc-testing-app-g1gc-1 mkdir -p /etc/newman/results
 
       # Run Postman tests for G1GC
       - name: Run Postman Tests (G1GC)
