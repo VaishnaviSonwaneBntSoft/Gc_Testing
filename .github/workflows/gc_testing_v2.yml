@@ -63,7 +63,7 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
-          -v ${{ github.workspace }}/results:/etc/newman
+          -v ${{ github.workspace }}/results:/etc/newman \
           -t postman/newman \
           run /etc/newman/Testing.postman_collection.json \
           --reporters json --reporter-json-export /etc/g1gc_results.json
@@ -99,7 +99,7 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
-          -v ${{ github.workspace }}/results:/etc/newman
+          -v ${{ github.workspace }}/results:/etc/newman \
           -t postman/newman \
           run /etc/newman/TestingZgc.postman_collection.json \
           --reporters json --reporter-json-export /etc/zgc_results.json
