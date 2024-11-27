@@ -24,6 +24,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      #Create folder in repository
       - name: Create directory dynamically
         run: |
           mkdir -p $(pwd)/results
@@ -48,6 +49,7 @@ jobs:
       - name: Build the JAR file
         run: ./gradlew build
 
+      # Create Docker network
       - name: Create network
         run: docker network create test-network
 
@@ -61,7 +63,7 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
-          -v ${{ github.workspace }}/results:/etc/newman/results \
+          -v ${{ github.workspace }}:/etc/newman/results \
           -t postman/newman \
           run /etc/newman/Testing.postman_collection.json \
           --reporter-json-export /etc/newman/results/g1gc_results.json
@@ -92,7 +94,7 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
-          -v ${{ github.workspace }}/results:/etc/newman/results \
+          -v ${{ github.workspace }}:/etc/newman/results \
           -t postman/newman \
           run /etc/newman/TestingZgc.postman_collection.json \
           --reporter-json-export /etc/newman/results/zgc_results.json
@@ -117,10 +119,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: g1gc_results
-          path: results_from_g1gc/g1gc_results.json
+          path: ${{ github.workspace }}/g1gc_results.json
 
       - name: Publish ZGC Test Results to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
           name: zgc_results
-          path: results_from_zgc/zgc_results.json
+          path: ${{ github.workspace }}/zgc_results.json
