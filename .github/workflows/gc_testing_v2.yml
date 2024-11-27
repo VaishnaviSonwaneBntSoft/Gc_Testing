@@ -63,9 +63,10 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
+          -v ${{ github.workspace }}/results:/etc/newman
           -t postman/newman \
           run /etc/newman/Testing.postman_collection.json \
-          --reporters json --reporter-json-export /etc/newman/g1gc_results.json
+          --reporters json --reporter-json-export /etc/g1gc_results.json
 
       # Check contents of results folder inside container (G1GC)
       - name: Check G1GC Results Inside Container
@@ -76,7 +77,7 @@ jobs:
       # Copy results from container to repository (G1GC)
       - name: Copy G1GC Results to Repository
         run: |
-          docker cp gc_testing-gc-testing-app-g1gc-1:/etc/newman/g1gc_results.json ./
+          docker cp gc_testing-gc-testing-app-g1gc-1:/etc/g1gc_results.json ./
 
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
@@ -98,9 +99,10 @@ jobs:
         run: |
           docker run --network test-network \
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
+          -v ${{ github.workspace }}/results:/etc/newman
           -t postman/newman \
           run /etc/newman/TestingZgc.postman_collection.json \
-          --reporters json --reporter-json-export /etc/newman/zgc_results.json
+          --reporters json --reporter-json-export /etc/zgc_results.json
 
       # Check contents of results folder inside container (ZGC)
       - name: Check ZGC Results Inside Container
@@ -111,7 +113,7 @@ jobs:
       # Copy results from container to repository (ZGC)
       - name: Copy ZGC Results to Repository
         run: |
-          docker cp gc_testing-gc-testing-app-zgc-1:/etc/newman/zgc_results.json ./
+          docker cp gc_testing-gc-testing-app-zgc-1:/etc/zgc_results.json ./
 
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
