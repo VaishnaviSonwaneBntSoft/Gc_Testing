@@ -72,12 +72,15 @@ jobs:
       - name: Check G1GC Results Inside Container
         run: |
           docker ps
-          docker exec  gc_testing-gc-testing-app-g1gc-1 ls -la /
+          docker exec gc_testing-gc-testing-app-g1gc-1 ls -la /
+
+      - name: Create results directory for G1GC
+        run: mkdir -p ./results_from_g1gc
 
       # Copy results from container to repository (G1GC)
       - name: Copy G1GC Results to Repository
         run: |
-          docker cp  gc_testing-gc-testing-app-g1gc-1:/etc/newman/results ./results_from_g1gc
+          docker cp gc_testing-gc-testing-app-g1gc-1:/etc/newman/results ./results_from_g1gc
 
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
@@ -109,6 +112,9 @@ jobs:
         run: |
           docker ps
           docker exec gc_testing-gc-testing-app-zgc-1 ls -la /
+
+      - name: Create results directory for G1GC
+        run: mkdir -p ./results_from_zgc
 
       # Copy results from container to repository (ZGC)
       - name: Copy ZGC Results to Repository
