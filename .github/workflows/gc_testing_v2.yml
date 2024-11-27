@@ -70,6 +70,7 @@ jobs:
       # Check contents of results folder inside container (G1GC)
       - name: Check G1GC Results Inside Container
         run: |
+          docker ps -a
           docker exec gc-testing-app-g1gc ls -la /
 
       # Copy results from container to repository (G1GC)
