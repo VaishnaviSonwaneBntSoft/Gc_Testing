@@ -61,14 +61,14 @@ jobs:
       # Run Postman tests for G1GC
       - name: Run Postman Tests (G1GC)
         run: |
-          docker run --network test-network -v ${{ github.workspace }}/postman-collection:/etc/newman postman/newman run /etc/newman/Testing.postman_collection.json --reporters json --reporter-json-export /etc/g1gc_results.json
+          docker run --network test-network -v ${{ github.workspace }}/postman-collection:/etc postman/newman run /etc/newman/Testing.postman_collection.json --reporters json --reporter-json-export /etc/g1gc_results.json
           docker exec gc_testing-gc-testing-app-g1gc-1 ls -la /
 
       - name: Publish G1GC Test Results to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
           name: g1gc_results
-          path: g1gc_results.json
+          path: /postman-collection/g1gc_results.json
 
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
@@ -88,7 +88,7 @@ jobs:
       # Run Postman tests for ZGC
       - name: Run Postman Tests (ZGC)
         run: |
-          docker run --network test-network -v ${{ github.workspace }}/postman-collection:/etc/newman postman/newman run /etc/newman/Testing.postman_collection.json --reporters json --reporter-json-export /etc/zgc_results.json
+          docker run --network test-network -v ${{ github.workspace }}/postman-collection:/etc postman/newman run /etc/newman/Testing.postman_collection.json --reporters json --reporter-json-export /etc/zgc_results.json
           docker exec gc_testing-gc-testing-app-zgc-1 ls -la /
 
       # Publish Test Results
@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: zgc_results
-          path: zgc_results.json
+          path: /postman-collection/zgc_results.json
 
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
