@@ -36,6 +36,3 @@ out/
 ### VS Code ###
 .vscode/
 
-/results_from_g1gc/
-/results_from_zgc/
-
