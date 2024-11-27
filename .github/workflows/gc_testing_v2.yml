@@ -66,7 +66,8 @@ jobs:
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
           -t postman/newman \
           run /etc/newman/Testing.postman_collection.json \
-          --reporter-json-export /etc/newman/results/g1gc_results.json
+          --reporters json \
+          --reporter-json-export /workspace/g1gc_results.json
 
       # Check contents of results folder inside container (G1GC)
       - name: Check G1GC Results Inside Container
@@ -82,7 +83,6 @@ jobs:
         run: |
           docker cp gc_testing-gc-testing-app-g1gc-1:/etc/newman/results ./results_from_g1gc
           ls -la ./results_from_g1gc/results
-          cat ./results_from_g1gc/results/g1gc_results.json
 
       # Stop and remove the G1GC container
       - name: Stop and Remove G1GC Container
@@ -107,7 +107,8 @@ jobs:
           -v ${{ github.workspace }}/postman-collection:/etc/newman \
           -t postman/newman \
           run /etc/newman/TestingZgc.postman_collection.json \
-          --reporter-json-export /etc/newman/results/zgc_results.json
+          --reporters json \
+          --reporter-json-export /workspace/zgc_results.json
 
       # Check contents of results folder inside container (ZGC)
       - name: Check ZGC Results Inside Container
@@ -123,7 +124,6 @@ jobs:
         run: |
           docker cp gc_testing-gc-testing-app-zgc-1:/etc/newman/results ./results_from_zgc
           ls -la ./results_from_zgc/results
-          cat ./results_from_zgc/results/zgc_results.json
 
       # Stop and remove the ZGC container
       - name: Stop and Remove ZGC Container
@@ -135,11 +135,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: g1gc_results
-          path: ./results_from_g1gc/results/g1gc_results.json
+          path: g1gc_results.json
 
       - name: Publish ZGC Test Results to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
           name: zgc_results
-          path: ./results_from_zgc/results/zgc_results.json
+          path: zgc_results.json
 
