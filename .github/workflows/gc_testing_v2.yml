@@ -16,8 +16,8 @@ jobs:
     env:
       IMAGE_NAME: "gc-testing-image"
       APP_PORT: 8089
-      G1GC_PARAMS: "-XX:+UseG1GC"
-      ZGC_PARAMS: "-XX:+UseZGC"
+      G1GC_PARAMS: "-XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+PrintGCDetails"
+      ZGC_PARAMS: "-XX:+UseZGC -XX:+UnlockDiagnosticVMOptions -XX:+LogGC"
 
     steps:
       # Checkout the repository
